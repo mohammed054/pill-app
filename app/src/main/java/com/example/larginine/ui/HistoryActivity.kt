@@ -6,13 +6,10 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.larginine.R
 import com.example.larginine.data.PillHistory
 import com.example.larginine.databinding.ActivityHistoryBinding
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 class HistoryActivity : AppCompatActivity() {
 
@@ -47,11 +44,9 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     private fun observeHistory() {
-        lifecycleScope.launch {
-            viewModel.allHistory.collectLatest { history ->
-                adapter.submitList(history)
-                binding.emptyText.visibility = if (history.isEmpty()) View.VISIBLE else View.GONE
-            }
+        viewModel.allHistory.observe(this) { history: List<PillHistory> ->
+            adapter.submitList(history)
+            binding.emptyText.visibility = if (history.isEmpty()) View.VISIBLE else View.GONE
         }
     }
 

@@ -7,13 +7,10 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.larginine.R
 import com.example.larginine.data.NotificationPhrase
 import com.example.larginine.databinding.ActivitySettingsBinding
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -36,8 +33,8 @@ class SettingsActivity : AppCompatActivity() {
         // Custom phrases adapter (with delete button)
         customPhraseAdapter = PhraseAdapter(
             showDelete = true,
-            onToggle = { phrase -> viewModel.togglePhraseEnabled(phrase) },
-            onDelete = { phrase -> viewModel.deletePhrase(phrase) }
+            onToggle = { phrase: NotificationPhrase -> viewModel.togglePhraseEnabled(phrase) },
+            onDelete = { phrase: NotificationPhrase -> viewModel.deletePhrase(phrase) }
         )
         binding.phrasesRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.phrasesRecyclerView.adapter = customPhraseAdapter
@@ -45,8 +42,8 @@ class SettingsActivity : AppCompatActivity() {
         // Default phrases adapter (no delete button)
         defaultPhraseAdapter = PhraseAdapter(
             showDelete = false,
-            onToggle = { phrase -> viewModel.togglePhraseEnabled(phrase) },
-            onDelete = { }
+            onToggle = { phrase: NotificationPhrase -> viewModel.togglePhraseEnabled(phrase) },
+            onDelete = { _: NotificationPhrase -> }
         )
         binding.defaultPhrasesRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.defaultPhrasesRecyclerView.adapter = defaultPhraseAdapter
@@ -63,16 +60,14 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun observePhrases() {
-        lifecycleScope.launch {
-            viewModel.allPhrases.collectLatest { phrases ->
-                val customPhrases = phrases.filter { it.isCustom }
-                val defaultPhrases = phrases.filter { !it.isCustom }
+        viewModel.allPhrases.observe(this) { phrases: List<NotificationPhrase> ->
+            val customPhrases = phrases.filter { phrase: NotificationPhrase -> phrase.isCustom }
+            val defaultPhrases = phrases.filter { phrase: NotificationPhrase -> !phrase.isCustom }
 
-                customPhraseAdapter.submitList(customPhrases)
-                defaultPhraseAdapter.submitList(defaultPhrases)
+            customPhraseAdapter.submitList(customPhrases)
+            defaultPhraseAdapter.submitList(defaultPhrases)
 
-                binding.noPhrasesText.visibility = if (customPhrases.isEmpty()) View.VISIBLE else View.GONE
-            }
+            binding.noPhrasesText.visibility = if (customPhrases.isEmpty()) View.VISIBLE else View.GONE
         }
     }
 
