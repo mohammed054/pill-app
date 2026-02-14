@@ -11,8 +11,10 @@ class PillRepository(
     val allPills: Flow<List<Pill>> = pillDao.getAllPills()
     val allPillsLiveData: LiveData<List<Pill>> = pillDao.getAllPillsLiveData()
     val allHistory: Flow<List<PillHistory>> = pillHistoryDao.getAllHistory()
+    val allHistoryLiveData: LiveData<List<PillHistory>> = pillHistoryDao.getAllHistoryLiveData()
     val enabledPhrases: Flow<List<NotificationPhrase>> = notificationPhraseDao.getEnabledPhrases()
     val allPhrases: Flow<List<NotificationPhrase>> = notificationPhraseDao.getAllPhrases()
+    val allPhrasesLiveData: LiveData<List<NotificationPhrase>> = notificationPhraseDao.getAllPhrasesLiveData()
 
     suspend fun getPillById(id: Long): Pill? {
         return pillDao.getPillById(id)

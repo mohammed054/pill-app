@@ -38,8 +38,8 @@ class PillViewModel(application: Application) : AndroidViewModel(application) {
 
         repository = PillRepository(pillDao, pillHistoryDao, phraseDao)
         allPills = repository.allPillsLiveData
-        allHistory = repository.allHistory as LiveData<List<PillHistory>>
-        allPhrases = repository.allPhrases as LiveData<List<NotificationPhrase>>
+        allHistory = repository.allHistoryLiveData
+        allPhrases = repository.allPhrasesLiveData
     }
 
     /**

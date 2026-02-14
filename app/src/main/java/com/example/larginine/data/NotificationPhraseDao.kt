@@ -1,5 +1,6 @@
 package com.example.larginine.data
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
@@ -10,6 +11,9 @@ interface NotificationPhraseDao {
 
     @Query("SELECT * FROM notification_phrases")
     fun getAllPhrases(): Flow<List<NotificationPhrase>>
+
+    @Query("SELECT * FROM notification_phrases")
+    fun getAllPhrasesLiveData(): LiveData<List<NotificationPhrase>>
 
     @Query("SELECT * FROM notification_phrases WHERE isCustom = 1")
     fun getCustomPhrases(): Flow<List<NotificationPhrase>>

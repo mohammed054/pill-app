@@ -9,6 +9,9 @@ interface PillHistoryDao {
     @Query("SELECT * FROM pill_history ORDER BY timestamp DESC")
     fun getAllHistory(): Flow<List<PillHistory>>
 
+    @Query("SELECT * FROM pill_history ORDER BY timestamp DESC")
+    fun getAllHistoryLiveData(): LiveData<List<PillHistory>>
+
     @Query("SELECT * FROM pill_history ORDER BY timestamp DESC LIMIT :limit")
     fun getRecentHistory(limit: Int): Flow<List<PillHistory>>
 
