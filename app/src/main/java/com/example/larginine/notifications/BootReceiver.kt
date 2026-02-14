@@ -1,6 +1,8 @@
-package com.example.larginine
+package com.example.larginine.notifications
 
-import android.app.Application
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -16,30 +18,28 @@ import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 /**
- * Application class that initializes the database and reschedules reminders.
- * This ensures pill reminders persist across app restarts and device reboots.
+ * BroadcastReceiver that reschedules all pill reminders after device boot.
+ * This ensures reminders persist across device restarts.
  */
-class LArginineApp : Application() {
+class BootReceiver : BroadcastReceiver() {
+    
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-
-    override fun onCreate() {
-        super.onCreate()
-        initializeReminders()
+    override fun onReceive(context: Context, intent: Intent) {
+        if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
+            rescheduleAllReminders(context)
+        }
     }
 
-    /**
-     * Initializes all enabled pill reminders from the database.
-     * Called on app startup to restore any scheduled reminders.
-     */
-    private fun initializeReminders() {
-        applicationScope.launch {
+    private fun rescheduleAllReminders(context: Context) {
+        scope.launch {
             try {
-                val database = AppDatabase.getDatabase(this@LArginineApp)
+                val database = AppDatabase.getDatabase(context)
                 val pills = database.pillDao().getEnabledPills()
 
                 pills.forEach { pill ->
                     scheduleReminder(
+                        context = context,
                         pillId = pill.id,
                         hour = pill.reminderHour,
                         minute = pill.reminderMinute,
@@ -52,15 +52,8 @@ class LArginineApp : Application() {
         }
     }
 
-    /**
-     * Schedules a periodic reminder using WorkManager.
-     *
-     * @param pillId Unique identifier for the pill
-     * @param hour Hour of the first reminder (0-23)
-     * @param minute Minute of the first reminder (0-59)
-     * @param intervalMinutes How often to repeat (in minutes)
-     */
     private fun scheduleReminder(
+        context: Context,
         pillId: Long,
         hour: Int,
         minute: Int,
@@ -75,14 +68,14 @@ class LArginineApp : Application() {
             set(Calendar.SECOND, 0)
         }
 
-        // If target time has passed today, schedule for tomorrow
+        // If the target time has passed today, schedule for next occurrence
         if (targetTime.before(currentTime)) {
             targetTime.add(Calendar.DAY_OF_MONTH, 1)
         }
 
         val initialDelay = targetTime.timeInMillis - currentTime.timeInMillis
 
-        // Convert interval to hours (WorkManager requirement)
+        // Use the user-defined interval (converted to hours for WorkManager)
         val intervalHours = (intervalMinutes / 60).toLong().coerceAtLeast(1)
 
         val workRequest = PeriodicWorkRequestBuilder<PillReminderWorker>(
@@ -97,9 +90,9 @@ class LArginineApp : Application() {
             )
             .build()
 
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             workName,
-            ExistingPeriodicWorkPolicy.KEEP,
+            ExistingPeriodicWorkPolicy.REPLACE,
             workRequest
         )
     }

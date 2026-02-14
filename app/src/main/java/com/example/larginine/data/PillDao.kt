@@ -15,6 +15,9 @@ interface PillDao {
     @Query("SELECT * FROM pills WHERE id = :id")
     suspend fun getPillById(id: Long): Pill?
 
+    @Query("SELECT * FROM pills WHERE isEnabled = 1")
+    suspend fun getEnabledPills(): List<Pill>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPill(pill: Pill): Long
 
@@ -26,4 +29,10 @@ interface PillDao {
 
     @Query("DELETE FROM pills WHERE id = :id")
     suspend fun deletePillById(id: Long)
+
+    @Query("UPDATE pills SET lastNotificationTime = :time WHERE id = :pillId")
+    suspend fun updateLastNotificationTime(pillId: Long, time: Long)
+
+    @Query("UPDATE pills SET isEnabled = :enabled WHERE id = :pillId")
+    suspend fun setPillEnabled(pillId: Long, enabled: Boolean)
 }

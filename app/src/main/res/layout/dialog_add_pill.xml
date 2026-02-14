@@ -1,42 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="24dp">
+    android:layout_height="wrap_content">
 
-    <com.google.android.material.textfield.TextInputLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/pill_name_hint">
+        android:orientation="vertical"
+        android:padding="24dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/pillNameEditText"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:maxLines="1" />
+            android:hint="@string/pill_name_hint">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/pillNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/set_time"
-        android:textSize="16sp"
-        android:textColor="@color/text_primary"
-        android:layout_marginTop="16dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/selectedTimeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="08:00"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        android:textColor="@color/primary"
-        android:layout_marginTop="8dp"
-        android:padding="8dp"
-        android:background="?attr/selectableItemBackground" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/set_time"
+            android:textSize="16sp"
+            android:textColor="@color/text_primary"
+            android:layout_marginTop="16dp" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/selectedTimeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="08:00"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textColor="@color/primary"
+            android:layout_marginTop="8dp"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reminder_interval"
+            android:textSize="16sp"
+            android:textColor="@color/text_primary"
+            android:layout_marginTop="16dp" />
+
+        <Spinner
+            android:id="@+id/intervalSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:drawable/btn_dropdown" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/notification_settings"
+            android:textSize="16sp"
+            android:textColor="@color/text_primary"
+            android:layout_marginTop="16dp" />
+
+        <CheckBox
+            android:id="@+id/soundCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/enable_sound"
+            android:checked="true" />
+
+        <CheckBox
+            android:id="@+id/vibrationCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/enable_vibration"
+            android:checked="true" />
+
+        <CheckBox
+            android:id="@+id/ledCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/enable_led" />
+
+    </LinearLayout>
+
+</ScrollView>

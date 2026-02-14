@@ -27,6 +27,35 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.HistoryActivity"
+            android:exported="false"
+            android:theme="@style/Theme.LArginineReminder" />
+
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.LArginineReminder" />
+
+        <!-- BroadcastReceiver for notification actions (Take/Skip buttons) -->
+        <receiver
+            android:name=".notifications.NotificationActionReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.example.larginine.ACTION_TAKEN" />
+                <action android:name="com.example.larginine.ACTION_SKIP" />
+            </intent-filter>
+        </receiver>
+
+        <!-- BroadcastReceiver for boot completed -->
+        <receiver
+            android:name=".notifications.BootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>
