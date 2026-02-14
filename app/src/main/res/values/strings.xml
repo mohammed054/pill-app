@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">L-Arginine Reminder</string>
+    <string name="pill_reminder_text">Did you take your L-arginine pill? Remember: after breakfast, not on empty stomach.</string>
+    <string name="i_took_it">I Took It</string>
+    <string name="reminder_info">You\'ll receive reminders every 15 minutes until you mark it as taken.</string>
+    <string name="notification_title">L-Arginine Reminder</string>
+    <string name="notification_text">Take your L-arginine pill after breakfast.</string>
+    <string name="taken_today">✓ Taken today</string>
+    <string name="not_taken_yet">✗ Not taken yet</string>
+</resources>
