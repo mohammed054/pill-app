@@ -1,7 +1,13 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
+    id 'org.jetbrains.kotlin.kapt'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 android {
@@ -30,6 +36,13 @@ android {
 
     kotlinOptions {
         jvmTarget = '17'
+    }
+
+    kapt {
+        correctErrorTypes = true
+        javacOptions {
+            option("-Xmaxerrs", 500)
+        }
     }
 
     buildFeatures {
